@@ -45,4 +45,18 @@ Este repositório tem um workflow (`.github/workflows/deploy.yml`) que builda o 
 
 Passo único manual (uma vez só): em `Settings → Pages → Build and deployment → Source`, selecione **GitHub Actions**.
 
-> **Importante:** GitHub Pages só serve arquivos estáticos — ele não roda o backend Express nem chama a API do Gemini. No site publicado em Pages, a interface funciona normalmente com os dados de exemplo iniciais, mas as buscas por IA (`/api/search`, `/api/identify-image`, `/api/validate-coupon`, `/api/extract-price`) não têm servidor para responder e caem no tratamento de erro do app (toast informativo, sem quebrar a página). Para ter a busca por IA funcionando no site publicado, é necessário hospedar o backend separadamente (ex: Cloud Run, Render, Vercel Functions, Cloudflare Workers) e apontar o frontend para essa URL.
+> **Importante:** GitHub Pages só serve arquivos estáticos — ele não roda o backend Express. Por isso a IA (busca, scanner de imagem, análise de link, validação de cupom) é hospedada separadamente na Vercel, ver seção abaixo. Sem essa configuração, as rotas de IA caem no tratamento de erro do app (toast informativo, sem quebrar a página).
+
+## Hospedando a IA na Vercel
+
+O backend (`server/apiRoutes.ts`, com as rotas `/api/search`, `/api/identify-image`, `/api/extract-price`, `/api/validate-coupon`) roda tanto no Express local (`server.ts`) quanto como função serverless na Vercel (`api/index.ts` + `vercel.json`), sem duplicar código.
+
+1. Crie uma conta na [Vercel](https://vercel.com) (login com GitHub, plano gratuito, sem cartão) e importe este repositório como um novo projeto.
+2. Em **Project Settings → Environment Variables**, adicione `GEMINI_API_KEY` com sua chave real (Production e Preview). Sem ela, as rotas caem no fallback com dados de exemplo, igual ao comportamento local.
+3. Depois do primeiro deploy, copie a URL gerada pela Vercel (ex: `https://compara-ja.vercel.app`).
+4. No GitHub, vá em **Settings → Secrets and variables → Actions → Variables** e crie a variável `API_BASE_URL` com essa URL (sem `/` no final). O workflow do GitHub Pages injeta essa URL no build via `VITE_API_BASE_URL`.
+5. Faça um novo push (ou re-rode o workflow "Deploy to GitHub Pages") para o site publicado passar a chamar a Vercel.
+
+Em dev local (`bun run dev`), `VITE_API_BASE_URL` fica vazio e os fetches continuam relativos (`/api/...`), servidos pelo próprio `server.ts` — nenhuma mudança de comportamento.
+
+Por segurança, o CORS em `api/index.ts` só libera a origin do GitHub Pages (`https://itsbravos.github.io`). Se o repositório mudar de dono/nome, atualize essa allowlist.

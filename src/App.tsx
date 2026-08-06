@@ -18,6 +18,7 @@ import { ImageScannerModal } from './components/ImageScannerModal';
 import { LinkAnalyzerModal } from './components/LinkAnalyzerModal';
 import { NotificationDrawer } from './components/NotificationDrawer';
 import { CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
+import { apiUrl } from './lib/apiClient';
 
 export default function App() {
   const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
@@ -74,7 +75,7 @@ export default function App() {
     setActiveTab('search');
 
     try {
-      const response = await fetch('/api/search', {
+      const response = await fetch(apiUrl('/api/search'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query, barcode }),

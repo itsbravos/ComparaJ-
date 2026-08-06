@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Camera, Upload, X, Sparkles, Loader2, Image as ImageIcon } from 'lucide-react';
+import { apiUrl } from '../lib/apiClient';
 
 interface ImageScannerModalProps {
   isOpen: boolean;
@@ -34,7 +35,7 @@ export const ImageScannerModal: React.FC<ImageScannerModalProps> = ({ isOpen, on
     setErrorMessage(null);
 
     try {
-      const response = await fetch('/api/identify-image', {
+      const response = await fetch(apiUrl('/api/identify-image'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ imageBase64: selectedImage }),

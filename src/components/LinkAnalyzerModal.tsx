@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link as LinkIcon, X, Sparkles, Loader2, ArrowRight } from 'lucide-react';
+import { apiUrl } from '../lib/apiClient';
 
 interface LinkAnalyzerModalProps {
   isOpen: boolean;
@@ -26,7 +27,7 @@ export const LinkAnalyzerModal: React.FC<LinkAnalyzerModalProps> = ({
     setErrorMsg(null);
 
     try {
-      const response = await fetch('/api/extract-price', {
+      const response = await fetch(apiUrl('/api/extract-price'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: urlInput.trim() }),

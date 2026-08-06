@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Coupon } from '../types';
 import { Tag, Check, Copy, ShieldCheck, Sparkles, Filter, Search, Loader2 } from 'lucide-react';
+import { apiUrl } from '../lib/apiClient';
 
 interface CouponsDashboardProps {
   coupons: Coupon[];
@@ -47,7 +48,7 @@ export const CouponsDashboard: React.FC<CouponsDashboardProps> = ({ coupons, onA
     setTestResult(null);
 
     try {
-      const response = await fetch('/api/validate-coupon', {
+      const response = await fetch(apiUrl('/api/validate-coupon'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: testCode.trim(), storeName: testStore }),
