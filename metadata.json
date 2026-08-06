@@ -1,0 +1,6 @@
+{
+  "name": "ComparaJá",
+  "description": "App comparador de preços, cupons e histórico de ofertas com alertas e busca inteligente por IA.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
