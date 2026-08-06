@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { registerApiRoutes } from "../server/apiRoutes";
+import { registerApiRoutes } from "../server/apiRoutes.js";
 
 const ALLOWED_ORIGINS = ["https://itsbravos.github.io"];
 

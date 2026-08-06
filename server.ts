@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import dotenv from "dotenv";
-import { registerApiRoutes } from "./server/apiRoutes";
+import { registerApiRoutes } from "./server/apiRoutes.js";
 
 dotenv.config();
 
